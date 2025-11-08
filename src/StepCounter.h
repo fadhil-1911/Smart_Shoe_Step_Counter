@@ -129,9 +129,9 @@ struct StepCounter {
 //      • MIN_REFRACTORY (ensure steps are not too close together)
 //
 // This makes the system stable for:
-// ✔ Slow walking
-// ✔ Jogging
-// ✔ Moderate impacts
+// - Slow walking
+// - Jogging
+// - Moderate impacts
 
-If you want, I can also translate your ASCII flowchart into a clean English version so it matches this comment block perfectly. Do you want me to do that?
+
 
