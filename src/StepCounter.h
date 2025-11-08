@@ -1,3 +1,75 @@
+/*
+  ──────────────────────────────────────────────────────────
+  STEP COUNTER LOGIC (MPU6050 / Accelerometer based)
+  ──────────────────────────────────────────────────────────
+
+  1. Sensor reads the acceleration magnitude → currentAcc
+     - Typically calculated as: sqrt(x² + y² + z²)
+
+  2. impactStrength is used to measure a peak impact
+     - Usually derived from changes in acceleration (delta)
+     - Example: |currentAcc - previousAcc|
+
+  3. Peak detection (impactDetected = true):
+     - If impactStrength exceeds PEAK_THRESHOLD
+       and does not exceed MAX_IMPACT_THRESHOLD
+         → the system detects a shoe impact
+         → impactDetected = true
+         → lastImpactTime is recorded
+
+        if (!impactDetected &&
+            impactStrength >= PEAK_THRESHOLD &&
+            impactStrength <= MAX_IMPACT_THRESHOLD)
+        {
+            impactDetected = true;
+            lastImpactTime = now;
+        }
+
+  4. Refractory timing (anti double-count)
+     - After a single impact is detected,
+       the system waits PRE_REFRACTORY (e.g., 350 ms)
+       to prevent small shakes or vibrations from counting as another step.
+
+        if (impactDetected && (now - lastImpactTime >= PRE_REFRACTORY)) {
+
+  5. Step recognition (stepCount += 2)
+     - After PRE_REFRACTORY completes,
+       a step can be counted.
+     - **We add 2 steps per detected impact**:
+         • Assumes one detected peak represents one foot (e.g., right shoe)
+         • Adds 1 step for the opposite foot (e.g., left shoe)
+         → Simplifies counting while maintaining approximate step accuracy
+     - Must also satisfy MIN_REFRACTORY
+       to ensure steps are not double-counted in a short period.
+
+        if (now - lastStepTime >= MIN_REFRACTORY) {
+            stepCount += 2; // count both right and left steps
+            lastStepTime = now;
+        }
+
+  6. Reset state
+     - impactDetected is reset so a new detection cycle can begin.
+
+        impactDetected = false;
+
+  ──────────────────────────────────────────────────────────
+  FLOW SUMMARY
+  ──────────────────────────────────────────────────────────
+  Shoe impact → detect peak → wait minimum time → count 2 steps → reset
+  ──────────────────────────────────────────────────────────
+
+  Parameter tuning:
+    PEAK_THRESHOLD       → minimum impact strength to detect a step
+    MAX_IMPACT_THRESHOLD → prevent extremely large impacts (e.g., fall / noise spike)
+    MIN_REFRACTORY       → minimum time between consecutive steps (anti double-count)
+    PRE_REFRACTORY       → cooldown period after an impact is detected
+
+  Step count note:
+    • One detected impact is assumed to represent one step per foot.
+    • stepCount += 2 accounts for both right and left foot for simplicity.
+
+*/
+
 #ifndef STEP_COUNTER_H
 #define STEP_COUNTER_H
 
@@ -47,91 +119,6 @@ struct StepCounter {
 
 #endif
 
-
-
-/*
-  ──────────────────────────────────────────────────────────
-  STEP COUNTER LOGIC (MPU6050 / Accelerometer based)
-  ──────────────────────────────────────────────────────────
-
-  1. Sensor reads the acceleration magnitude → currentAcc
-     - Typically calculated as: sqrt(x² + y² + z²)
-
-  2. impactStrength is used to measure a peak impact
-     - Usually derived from changes in acceleration (delta)
-     - Example: |currentAcc - previousAcc|
-
-  3. Peak detection (impactDetected = true):
-     - If impactStrength exceeds PEAK_THRESHOLD
-       and does not exceed MAX_IMPACT_THRESHOLD
-         → the system detects a shoe impact
-         → impactDetected = true
-         → lastImpactTime is recorded
-
-        if (!impactDetected &&
-            impactStrength >= PEAK_THRESHOLD &&
-            impactStrength <= MAX_IMPACT_THRESHOLD)
-        {
-            impactDetected = true;
-            lastImpactTime = now;
-        }
-
-  4. Refractory timing (anti double-count)
-     - After a single impact is detected,
-       the system waits PRE_REFRACTORY (e.g., 350 ms)
-       to prevent small shakes or vibrations from counting as another step.
-
-        if (impactDetected && (now - lastImpactTime >= PRE_REFRACTORY)) {
-
-  5. Step recognition (stepCount++)
-     - After PRE_REFRACTORY completes,
-       a step can be counted.
-     - Must also satisfy MIN_REFRACTORY
-       to ensure steps are not double-counted in a short period.
-
-        if (now - lastStepTime >= MIN_REFRACTORY) {
-            stepCount += 1 or 2;
-            lastStepTime = now;
-        }
-
-  6. Reset state
-     - impactDetected is reset so a new detection cycle can begin.
-
-        impactDetected = false;
-
-  ──────────────────────────────────────────────────────────
-  FLOW SUMMARY
-  ──────────────────────────────────────────────────────────
-  Shoe impact → detect peak → wait minimum time → count step → reset
-  ──────────────────────────────────────────────────────────
-
-  Parameter tuning:
-    PEAK_THRESHOLD       → minimum impact strength to detect a step
-    MAX_IMPACT_THRESHOLD → prevent extremely large impacts (e.g., fall / noise spike)
-    MIN_REFRACTORY       → minimum time between consecutive steps (anti double-count)
-    PRE_REFRACTORY       → cooldown period after an impact is detected
-
-*/
-
-
-// Core logic in short
-//  • Read acceleration.
-//  • Detect a peak impact that exceeds the threshold.
-//  • When a peak is detected → impactDetected = true.
-//  • Wait cooldown time to avoid double counting.
-//  • Count step when minimum time is satisfied.
-//  • Reset, and repeat the process.
-
-// What’s special about this logic?
-//  • No valley detection needed (peak-only approach → suitable for shoe step detection).
-//  • Two layers of anti-double-count:
-//      • PRE_REFRACTORY (wait after impact)
-//      • MIN_REFRACTORY (ensure steps are not too close together)
-//
-// This makes the system stable for:
-// - Slow walking
-// - Jogging
-// - Moderate impacts
 
 
 
