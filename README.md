@@ -107,7 +107,5 @@ MIT License – Free to use, modify, and distribute.
 
 ---
 
-If you like, I can also **make a GitHub-ready markdown with images for wiring** so you can drop it directly into your repo as `README.md`. This will include visual step connections and pinout diagram.
 
-Do you want me to do that next?
 
