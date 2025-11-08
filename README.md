@@ -4,7 +4,7 @@
 **Author:** fadhil1911
 **Release Date:** 2025‑11‑08
 
-Smart Shoe Step Counter with Arduino Nano, MPU6050, OLED display, and battery monitoring. Counts steps, displays battery status, and optionally shows step count on TM1637.
+Smart Shoe Step Counter with Arduino Nano, MPU6050, OLED display, and battery monitoring. Counts steps, displays battery status on oled, and optionally shows step count on TM1637.
 
 ---
 
