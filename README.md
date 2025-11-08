@@ -67,16 +67,16 @@ Smart Shoe Step Counter with Arduino Nano, MPU6050, OLED display, and battery mo
 ```
 Battery (+) ---- R1 ---- A0 ---- R2 ---- GND
                    
-Modul            Arduino)
-MPU6050 SDA ---- A4 (Arduino)
-MPU6050 SCL ---- A5 (Arduino)
-Reset Button ---- D10 (Arduino)
-OLED SDA ---- A4 (Arduino)
-OLED SCL ---- A5 (Arduino)
-TM1637 CLK ---- D2 (Arduino) [Optional]
-TM1637 DIO ---- D3 (Arduino) [Optional]
-TP4056 CHRG ---- A2 (Arduino)
-TP4056 STDBY --- A1 (Arduino)
+Modul                   Arduino Nano
+MPU6050 SDA ----------- A4 (Arduino)
+MPU6050 SCL ----------- A5 (Arduino)
+Reset Button ---------- D10 (Arduino)
+OLED SDA -------------- A4 (Arduino)
+OLED SCL -------------- A5 (Arduino)
+TM1637 CLK ------------ D2 (Arduino) [Optional]
+TM1637 DIO ------------ D3 (Arduino) [Optional]
+TP4056 CHRG (pin 6)---- A2 (Arduino) with 4.7k resistor
+TP4056 STDBY (pin 7)--- A1 (Arduino) with 4.7k resistor
 ```
 
 ---
