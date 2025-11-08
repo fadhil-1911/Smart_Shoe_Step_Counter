@@ -33,7 +33,7 @@ Smart Shoe Step Counter with Arduino Nano, MPU6050, OLED display, and battery mo
 | OLED Display | I2C (SDA=A4, SCL=A5) | 128x64 pixels                            |
 | SmartTM1637  | CLK=D2, DIO=D3       | Optional, set `USE_TM1637=1`             |
 
-**Battery voltage divider:** Connect battery(+) → R1 → A0, GND → R2 →  A0.
+**Battery voltage divider:** Connect battery(+) → R1 → A0, GND → R2 →  between R1 and A0.
 
 ---
 
