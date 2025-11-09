@@ -36,7 +36,7 @@ struct StepCounter {
     // KIRA LANGKAH JIKA impactDetected = true (ADA HENTAKAN KASUT)
     if (impactDetected) {                            // JIKA impactDetected = true
       if (now - lastImpactTime >= PRE_REFRACTORY) {  // JIKA SYARAT MASA PRE_REFRACTORY DI PENUHI
-        if (now - lastStepTime >= MIN_REFRACTORY) {  // JIKA SYARAT MASA PRE_REFRACTORY DI PENUHI
+        if (now - lastStepTime >= MIN_REFRACTORY) {  // JIKA SYARAT MASA MIN_REFRACTORY DI PENUHI
           stepCount += 2;                            // HITUNG LANGKAH
           lastStepTime = now;                        // RESET UNTUK HITUNGAN SETERUSNYA
         }
